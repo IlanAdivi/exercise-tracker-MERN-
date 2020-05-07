@@ -6,9 +6,7 @@ import {
 
 export const fetchUsers = () => async dispatch => {
     const response = await axios.get('http://localhost:5000/users')
-    // .then(s => console.log(s));
 
-    
     console.log(response);
 
     dispatch({

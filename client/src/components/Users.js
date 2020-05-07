@@ -11,8 +11,8 @@ function Users() {
     });
 
     const users = useSelector(state => {
-        console.log(state.usersData)
-        return state.usersData;
+        console.log(state.users)
+        return state.users;
     });
     console.log(typeof (users));
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ function Users() {
     }, [dispatch]);
 
     const OnCreateUser = () => {
-        console.log(user);
+        // console.log(user);
         dispatch(createUser(user));
     }
 
@@ -42,36 +42,37 @@ function Users() {
         setUser({ ...user, phone: e.target.value });
     };
 
-    if (users) {
-        console.log(users);
-    }
+    // if (users) {
+    //     console.log(users);
+    // }
 
     return (
         <div className="ui container">
             <br></br>
             {!users ?
                 <div>Loading...</div> :
-                Object.keys(users).map((user, index) =>
-                    <table
-                        key={user}
-                        className="ui selectable inverted celled table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+
+                <table
+                    className="ui selectable inverted celled table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user, index) =>
+                            <tr key={user._id}>
                                 <td>{user}</td>
                                 <td>Denied</td>
                                 <td className="selectable">
                                     <a href="#">Edit</a>
                                 </td>
-                            </tr>
-                        </tbody>
-                    </table>)}
+                            </tr>)}
+
+                    </tbody>
+                </table>}
 
             < div className="ui inverted segment" >
                 <div className="ui inverted form">

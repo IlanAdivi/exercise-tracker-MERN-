@@ -3,12 +3,7 @@ import {
     CREATE_USER
 } from '../actions/types';
 
-// const initialState = {
-//     usersData: {}
-// };
-
-export const usersData = (state = null, action) => {
-    console.log(action.type);
+export const users = (state = [], action) => {
     switch (action.type) {
         case FETCH_USERS:
             return action.payload;
