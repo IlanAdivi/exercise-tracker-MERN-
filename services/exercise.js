@@ -16,7 +16,7 @@ module.exports = {
         const date = Date.parse(exercise.date);
         const user = await User.findById(userId);
         exercise = new Exercise({
-            user: user,
+            user,
             course,
             grade,
             description,
@@ -26,17 +26,13 @@ module.exports = {
             date
         });
 
-        await exercise.save();
+        const newExercise = await exercise.save();
+        return newExercise;
     },
     getAllExercises: async () => {
         const exercises = await Exercise
             .find()
             .select("-__v -user.__v -user._id");
-        if (exercises.length === 0) {
-            return {
-                message: "There is no exercises now"
-            }
-        }
         return exercises;
     },
     getExerciseById: async exerciseId => {

@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers, createUser } from '../actions/index';
+import {
+    useDispatch,
+    useSelector
+}
+    from 'react-redux';
+import {
+    fetchUsers,
+    createUser,
+    deleteUser
+}
+    from '../actions/index';
 
-function Users() {
+const Users = () => {
     const [user, setUser] = useState({
         firstname: '',
         lastname: '',
@@ -10,20 +19,31 @@ function Users() {
         phone: ''
     });
 
-    const users = useSelector(state => {
-        console.log(state.users)
+    const usersList = useSelector(state => {
         return state.users;
     });
-    console.log(typeof (users));
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchUsers());
+        setUser({
+            firstname: '',
+            lastname: '',
+            kind: '',
+            phone: ''
+        });
     }, [dispatch]);
 
-    const OnCreateUser = () => {
-        // console.log(user);
-        dispatch(createUser(user));
+    const OnCreateUser = async e => {
+        e.preventDefault();
+        await dispatch(createUser(user));
+        setUser({
+            firstname: '',
+            lastname: '',
+            kind: '',
+            phone: ''
+        });
     }
 
     const onChangeFirstName = e => {
@@ -42,32 +62,70 @@ function Users() {
         setUser({ ...user, phone: e.target.value });
     };
 
-    // if (users) {
-    //     console.log(users);
-    // }
+    const onDeleteUser = async (userId, e) => {
+        e.preventDefault();
+        await dispatch(deleteUser(userId));
+    };
+
+    const onUpdateUser = (userId, e) => {
+        e.preventDefault();
+        window.location = `users/${userId}`;
+    };
+
+    const isEmptyUser = user => {
+        let countOfEmptyUserProperties = 0;
+
+        Object.keys(user).map(userPropeties => {
+            if (user[userPropeties] === '' ||
+                user[userPropeties] === null ||
+                user[userPropeties] === undefined) {
+                countOfEmptyUserProperties++;
+            }
+            return countOfEmptyUserProperties;
+        });
+
+        return countOfEmptyUserProperties > 0 ? true : false;
+    };
 
     return (
         <div className="ui container">
             <br></br>
-            {!users ?
-                <div>Loading...</div> :
+            {usersList.length === 0 ?
+                <div className="ui segment">
+                    <p></p>
+                    <div className="ui active inverted dimmer">
+                        <div className="ui loader"></div>
+                    </div>
+                </div> :
 
                 <table
                     className="ui selectable inverted celled table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Notes</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Kind</th>
+                            <th>Phone</th>
+                            <th>UpdateAction</th>
+                            <th>DeleteAction</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, index) =>
-                            <tr key={user._id}>
-                                <td>{user}</td>
-                                <td>Denied</td>
+                        {usersList.map((user, index) =>
+                            <tr key={index}>
+                                <td>{user.firstname}</td>
+                                <td>{user.lastname}</td>
+                                <td>{user.kind}</td>
+                                <td>{user.phone}</td>
                                 <td className="selectable">
-                                    <a href="#">Edit</a>
+                                    <a
+                                        onClick={e => onUpdateUser(user._id, e)}
+                                        href={`/${user._id}`}>Update</a>
+                                </td>
+                                <td className="selectable">
+                                    <a
+                                        href=""
+                                        onClick={e => onDeleteUser(user._id, e)}>Delete</a>
                                 </td>
                             </tr>)}
 
@@ -76,7 +134,7 @@ function Users() {
 
             < div className="ui inverted segment" >
                 <div className="ui inverted form">
-                    <div className="two fields">
+                    <div className="four fields">
                         <div className="field">
                             <label>First Name</label>
                             <input
@@ -111,9 +169,10 @@ function Users() {
                         </div>
                     </div>
 
-                    <div
+                    <button
                         className="ui submit button"
-                        onClick={() => OnCreateUser()}>Create</div>
+                        disabled={isEmptyUser(user) ? true : false}
+                        onClick={e => OnCreateUser(e)}>Create</button>
                 </div>
             </div>
         </div >

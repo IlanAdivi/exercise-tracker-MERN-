@@ -11,9 +11,8 @@ module.exports = {
             phone
         });
 
-        console.log(user);
-
         await user.save();
+        return user;
     },
     checkIfUserAlreadyExist: async user => {
         const count = await User.countDocuments(user);
@@ -29,11 +28,6 @@ module.exports = {
     },
     getAllUsers: async () => {
         const users = await User.find();
-        if (users.length === 0) {
-            return {
-                message: "There is no users now"
-            }
-        }
         return users;
     },
     getUserById: async id => {

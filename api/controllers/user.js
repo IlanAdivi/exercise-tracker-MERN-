@@ -4,18 +4,21 @@ module.exports = {
     createUser: async (req, res) => {
         try {
             const response = await UserService.checkIfUserAlreadyExist(req.body);
-            
+
             const { message, userAlreadyExist } = response;
-            
+
             if (userAlreadyExist) {
                 return res.status(403).json({
                     message
                 });
             }
-            
-            await UserService.createUser(req.body);
-            
-            res.status(201).json({ success: "New user added" });
+
+            const newUser = await UserService.createUser(req.body);
+
+            res.status(201).json({
+                newUser, 
+                success: "New user added"
+             });
         } catch (error) {
             res.status(400).send(error);
         }
@@ -55,7 +58,8 @@ module.exports = {
             }
 
             res.status(200).send({
-                success: "Deleting user successfully"
+                success: "Deleting user successfully",
+                user
             });
         } catch (error) {
             res.status(500).send(error);

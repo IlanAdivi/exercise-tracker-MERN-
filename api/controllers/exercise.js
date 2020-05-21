@@ -4,9 +4,10 @@ module.exports = {
     createExercise: async (req, res) => {
         try {
             const userId = req.params.id;
-            await ExerciseService.createExercise(req.body, userId);
+            const newExercise = await ExerciseService.createExercise(req.body, userId);
 
             res.status(201).json({
+                newExercise,
                 Success: "new exercise created"
             });
         } catch (error) {
