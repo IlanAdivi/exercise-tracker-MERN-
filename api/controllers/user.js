@@ -4,7 +4,6 @@ module.exports = {
     createUser: async (req, res) => {
         try {
             const response = await UserService.checkIfUserAlreadyExist(req.body);
-
             const { message, userAlreadyExist } = response;
 
             if (userAlreadyExist) {
@@ -13,12 +12,15 @@ module.exports = {
                 });
             }
 
-            const newUser = await UserService.createUser(req.body);
+            const newUser = await UserService.createUser(
+                req.body,
+                req.file
+            );
 
             res.status(201).json({
-                newUser, 
+                newUser,
                 success: "New user added"
-             });
+            });
         } catch (error) {
             res.status(400).send(error);
         }

@@ -33,15 +33,17 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         validate: function (phoneNumber) {
-            const regExpPhone = /([05][0|2|3|4]\d{7}|[05][0|2|3|4]-\d{7}|[05][0|2|3|4]-\d{3}-\d{4})$/;
+            const regExpPhone = /([05][0|2|3|4]\d{7})$/;
+            //|[05][0|2|3|4]-\d{7}|[05][0|2|3|4]-\d{3}-\d{4}
             const isValidPhoneNumber = phoneNumber.match(regExpPhone);
             if (!isValidPhoneNumber) {
                 throw new Error('Invalid phone number');
             }
             return isValidPhoneNumber;
         }
-
-    }
+    },
+    imageUrl: { type: String },
+    s3_key: { type: String }
 });
 
 const User = mongoose.model('User', userSchema);

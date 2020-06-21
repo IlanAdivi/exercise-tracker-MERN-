@@ -19,11 +19,6 @@ export default (state = Initial_State, action) => {
         case DELETE_EXERCISE:
             return state.filter(exercise => exercise._id !== action.payload);
         case UPDATE_EXERCISE:
-            state.grade = action.payload.grade;
-            state.description = action.payload.description;
-            state.status = action.payload.status;
-            state.duration = action.payload.duration;
-            state.completed = action.payload.completed;
             return state;
         default:
             return state;

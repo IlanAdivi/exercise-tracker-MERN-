@@ -33,9 +33,9 @@ export const fetchUserById = userId => async dispatch => {
     });
 };
 
-export const createUser = user => async dispatch => {
-    const response = await axios.post(`${URL}/users`, user);
-
+export const createUser = (user, image) => async dispatch => {
+    const response = await axios.post(`${URL}/users`, image, user);
+    
     dispatch({
         type: CREATE_USER,
         payload: response.data.newUser
@@ -81,8 +81,9 @@ export const fetchExerciseById = exerciseId => async dispatch => {
 };
 
 export const createExercise = exercise => async dispatch => {
-
+    console.log(exercise);
     const response = await axios.post(`${URL}/exercises/${exercise.userId}`, exercise);
+
     console.log(response.data.newExercise);
 
     dispatch({

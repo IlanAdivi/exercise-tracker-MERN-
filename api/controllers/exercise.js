@@ -61,12 +61,8 @@ module.exports = {
 
         const exerciseId = req.params.id;
         try {
-            const exercise = await ExerciseService.findUpdatingExerciseById(exerciseId);
+            const exercise = await ExerciseService.updateExercise(req.body, exerciseId, updates);
 
-            updates.map(updateExercise =>
-                exercise[updateExercise] = req.body[updateExercise]
-            );
-            await ExerciseService.saveUpdatingExercise(exercise);
             res.status(200).send({
                 exercise
             });

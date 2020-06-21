@@ -4,19 +4,30 @@ import React, {
 }
     from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css"
+
 import {
     updateExercise,
     fetchExerciseById
 }
     from '../actions';
 
+import { isEmpty } from '../Services';
+import LoadingForm from './forms/LoadingForm';
+import CustomInput from './forms/CustomInput';
+import CustomButton from './forms/CustomButton';
+
 const UpdateExercise = props => {
     const [exercise, setExercise] = useState({
-        grade: '',
-        description: '',
-        status: '',
+        // grade: '',
+        // description: '',
+        // status: '',
         duration: '',
-        completed: ''
+        startTime: null,
+        endTime: null,
+        date: null
+        // completed: ''
     });
 
     const selectedExercise = useSelector(state => state.selectedExercise);
@@ -25,35 +36,35 @@ const UpdateExercise = props => {
 
     useEffect(() => {
         dispatch(fetchExerciseById(exerciseId));
-    }, [dispatch]);
+    }, [dispatch, exerciseId]);
 
-    const onChangeGrade = e => {
-        setExercise({
-            ...exercise,
-            grade: e.target.value
-        });
-    };
+    // const onChangeGrade = e => {
+    //     setExercise({
+    //         ...exercise,
+    //         grade: e.target.value
+    //     });
+    // };
 
-    const onChangeDescription = e => {
-        setExercise({
-            ...exercise,
-            description: e.target.value
-        });
-    };
+    // const onChangeDescription = e => {
+    //     setExercise({
+    //         ...exercise,
+    //         description: e.target.value
+    //     });
+    // };
 
-    const onChangeStatus = e => {
-        setExercise({
-            ...exercise,
-            status: e.target.value
-        });
-    };
+    // const onChangeStatus = e => {
+    //     setExercise({
+    //         ...exercise,
+    //         status: e.target.value
+    //     });
+    // };
 
-    const onChangeCompleted = e => {
-        setExercise({
-            ...exercise,
-            completed: e.target.value
-        });
-    };
+    // const onChangeCompleted = e => {
+    //     setExercise({
+    //         ...exercise,
+    //         completed: e.target.value
+    //     });
+    // };
 
     const onChangeDuration = e => {
         setExercise({
@@ -62,30 +73,41 @@ const UpdateExercise = props => {
         });
     };
 
+    const onChangeStartHour = hour => {
+        setExercise({
+            ...exercise,
+            startTime: hour
+        });
+    };
+
+    const onChangeEndHour = hour => {
+        setExercise({
+            ...exercise,
+            endTime: hour
+        });
+    };
+
+    const onChangeDate = date => {
+        setExercise({
+            ...exercise,
+            date
+        });
+    };
+
     const onUpdateExercise = async (e, exercise) => {
         e.preventDefault();
         await dispatch(updateExercise(exercise, exerciseId));
         setExercise({
-            grade: '',
-            description: '',
-            status: '',
+            // grade: '',
+            // description: '',
+            // status: '',
             duration: '',
-            completed: ''
+            startTime: null,
+            endTime: null,
+            date: null
+            // completed: ''
         });
-        window.location = '/exercises';
-    };
-
-    const isEmptyExercise = exercise => {
-        let countOfEmptyExerciseProperties = 0;
-        Object.keys(exercise).map(exerciseProperties => {
-            if (exercise[exerciseProperties] === '' ||
-                exercise[exerciseProperties] === null ||
-                exercise[exerciseProperties] === undefined) {
-                countOfEmptyExerciseProperties++;
-            }
-        });
-
-        return countOfEmptyExerciseProperties === 0 ? false : true;
+        props.history.replace('/exercises');
     };
 
     return (
@@ -94,13 +116,13 @@ const UpdateExercise = props => {
             <br></br>
 
             {!selectedExercise || selectedExercise.length === 0 ?
-                <div className="ui segment">
-                    <p></p>
-                    <div className="ui active inverted dimmer">
-                        <div className="ui loader"></div>
-                    </div>
-                </div> :
+                <LoadingForm /> :
                 <div className="ui celled list">
+                    <img
+                        src={!selectedExercise.user ? '' : selectedExercise.user.imageUrl}
+                        alt=""
+                        className="ui small image"
+                    />
                     <div className="item">
                         <div className="content">
                             <div className="header">Firstname: </div>
@@ -110,19 +132,19 @@ const UpdateExercise = props => {
                     <div className="item">
                         <div className="content">
                             <div className="header">Lastname: </div>
-                            {!selectedExercise.user ? '' :  selectedExercise.user.lastname}
+                            {!selectedExercise.user ? '' : selectedExercise.user.lastname}
                         </div>
                     </div>
                     <div className="item">
                         <div className="content">
                             <div className="header">Kind: </div>
-                            {!selectedExercise.user ? '' :  selectedExercise.user.kind}
+                            {!selectedExercise.user ? '' : selectedExercise.user.kind}
                         </div>
                     </div>
                     <div className="item">
                         <div className="content">
                             <div className="header">Phone: </div>
-                            {!selectedExercise.user ? '' :  selectedExercise.user.phone}
+                            {!selectedExercise.user ? '' : selectedExercise.user.phone}
                         </div>
                     </div>
                     <div className="item">
@@ -131,7 +153,7 @@ const UpdateExercise = props => {
                             {selectedExercise.course}
                         </div>
                     </div>
-                    <div className="item">
+                    {/* <div className="item">
                         <div className="content">
                             <div className="header">Grade: </div>
                             {selectedExercise.grade}
@@ -142,39 +164,51 @@ const UpdateExercise = props => {
                             <div className="header">Description: </div>
                             {selectedExercise.description}
                         </div>
-                    </div>
-                    <div className="item">
+                    </div> */}
+                    {/* <div className="item">
                         <div className="content">
                             <div className="header">Status: </div>
                             {selectedExercise.status}
                         </div>
-                    </div>
+                    </div> */}
                     <div className="item">
                         <div className="content">
                             <div className="header">Duration(Hours): </div>
                             {selectedExercise.duration}
                         </div>
                     </div>
-                    <div className="item">
+                    {/* <div className="item">
                         <div className="content">
                             <div className="header">Completed: </div>
                             {JSON.stringify(selectedExercise.completed)}
+                        </div>
+                    </div> */}
+                    <div className="item">
+                        <div className="content">
+                            <div className="header">Start Time: </div>
+                            {selectedExercise.startTime}
+                        </div>
+                    </div>
+                    <div className="item">
+                        <div className="content">
+                            <div className="header">End Time: </div>
+                            {selectedExercise.endTime}
                         </div>
                     </div>
                     <div className="item">
                         <div className="content">
                             <div className="header">Date: </div>
-                            {!selectedExercise.date ? '' : selectedExercise.date.slice(0, 10)}
+                            {selectedExercise.date}
                         </div>
                     </div>
                 </div>
             }
 
 
-            < div className="ui inverted segment" >
-                <div className="ui inverted form">
-                    <div className="five fields">
-                        <div className="field">
+            < div className="ui segment" >
+                <div className="ui form">
+                    <div className="two fields">
+                        {/* <div className="field">
                             <label>Grade: </label>
                             <input
                                 placeholder="Grade"
@@ -194,15 +228,49 @@ const UpdateExercise = props => {
                                 placeholder="Status"
                                 value={exercise.status}
                                 onChange={e => onChangeStatus(e)} />
-                        </div>
+                        </div> */}
                         <div className="field">
                             <label>Duration: </label>
-                            <input
+                            <CustomInput
                                 placeholder="Duration"
                                 value={exercise.duration}
                                 onChange={e => onChangeDuration(e)} />
                         </div>
                         <div className="field">
+                            <label>StartTime: </label>
+                            <DatePicker
+                                placeholderText="h:mm aa"
+                                selected={exercise.startTime}
+                                onChange={hour => onChangeStartHour(hour)}
+                                showTimeSelect
+                                showTimeSelectOnly
+                                timeIntervals={15}
+                                timeCaption="Time"
+                                dateFormat="h:mm aa"
+                            />
+                        </div>
+                        <div className="field">
+                            <label>EndTime: </label>
+                            <DatePicker
+                                placeholderText="h:mm aa"
+                                selected={exercise.endTime}
+                                onChange={hour => onChangeEndHour(hour)}
+                                showTimeSelect
+                                showTimeSelectOnly
+                                timeIntervals={15}
+                                timeCaption="Time"
+                                dateFormat="h:mm aa"
+                            />
+                        </div>
+                        <div className="field">
+                            <label>Date: </label>
+                            <DatePicker
+                                placeholderText="DD/MM/YYYY"
+                                selected={exercise.date}
+                                onChange={date => onChangeDate(date)}
+                            />
+                        </div>
+                        {/* <div className="field">
                             <label>Completed: </label>
                             <div
                                 className="ui radio checkbox"
@@ -226,16 +294,15 @@ const UpdateExercise = props => {
                                 />
                                 <label>False</label>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </ div>
-            <button
+            <CustomButton
                 className="ui submit button"
-                disabled={isEmptyExercise(exercise) ? true : false}
-                onClick={e => onUpdateExercise(e, exercise)}>
-                Update
-            </button>
+                disabled={isEmpty(exercise) ? true : false}
+                onClick={e => onUpdateExercise(e, exercise)}
+                value="Update" />
         </div>
     );
 };
