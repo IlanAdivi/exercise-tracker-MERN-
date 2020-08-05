@@ -69,23 +69,27 @@ module.exports = {
         return newUser;
     },
     checkIfUserAlreadyExist: async user => {
-        const count = await User.countDocuments(user);
-        if (count > 0) {
-            return {
-                message: "user already exist",
+        const { phone } = user;
+        const isUserExist = await User.findOne({
+            phone: `${phone}`
+        });
+
+        return isUserExist ?
+            {
+                message: "User already exist",
                 userAlreadyExist: true
-            };
-        }
-        return {
-            userAlreadyExist: false
-        }
+            }
+            :
+            {
+                userAlreadyExist: false
+            }
     },
     getAllUsers: async () => {
         const users = await User.find();
         if (users.length === 0) {
             return {
                 users,
-                message: "There are no users yet"
+                message: 'There are no users Yet'
             }
         }
         return users;

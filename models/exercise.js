@@ -9,7 +9,7 @@ const exerciseSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: 3
+        minlength: [3, `Course is shorter than the minimum allowed length`],
     },
     // grade: {
     //     type: Number,
@@ -44,10 +44,6 @@ const exerciseSchema = new Schema({
     //     required: true,
     //     default: false
     // },
-    duration: {
-        type: Number,
-        required: true
-    },
     startTime: {
         type: String,
         required: true
@@ -61,10 +57,6 @@ const exerciseSchema = new Schema({
         required: true
     },
 }
-    // ,
-    //     {
-    //         timestamps: true
-    //     }
 );
 
 const Exercise = mongoose.model('Exercise', exerciseSchema);

@@ -1,22 +1,119 @@
+const doLocaleDateString = dateBeforeDoingLocalString => {
+    const dateAfterDoingLocalString = dateBeforeDoingLocalString.toLocaleDateString();
+    return dateAfterDoingLocalString;
+};
+
+const doLocaleHourString = HourBeforeDoingLocalString => {
+    const dateAfterDoingLocalString = HourBeforeDoingLocalString.toLocaleTimeString();
+    return dateAfterDoingLocalString;
+};
+
+const createDate = string => {
+    const date = new Date(string);
+    return date;
+};
+
+const doSliceInString = (stringBeforeSlicing, startIndex, endIndex) => {
+    const stringAfterSlicing = stringBeforeSlicing.slice(startIndex, endIndex);
+    return stringAfterSlicing;
+};
+
+const calculateDifference = (end, start) => {
+    const result = end - start;
+    return result;
+};
+
+const replaceString = (string, replaceValue, addValue) => {
+    return string.replace(replaceValue, addValue);
+};
+
 module.exports = {
     dateOfExercise: ({ date }) => {
-        const dateOfExerciseBeforeSlicing = new Date(date);
-        const dateOfExerciseAfterSlicing = dateOfExerciseBeforeSlicing.toLocaleDateString();
-        // console.log(dateOfExerciseAfterSlicing.slice(0, 10));
+        const dateOfExerciseBeforeSlicing = createDate(date);
+        const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
 
-        return dateOfExerciseAfterSlicing.slice(0, 10);
+        return dateOfExerciseAfterLocaleDateString;
     },
     startTimeOfExercise: ({ startTime }) => {
-        const startTimeBeforeSlicing = new Date(startTime);
-        // console.log(startTime);
-        const startTimeOfExerciseAfterSlicing = startTimeBeforeSlicing.toLocaleTimeString();
-
-        return startTimeOfExerciseAfterSlicing.slice(0, 5);
+        const startTimeBeforeSlicingDate = createDate(startTime);
+        const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+        const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+        return startTimeOfExerciseAfterSliceInString;
     },
     endTimeOfExercise: ({ endTime }) => {
-        const endTimeBeforeSlicing = new Date(endTime);
-        const endTimeOfExerciseAfterSlicing = endTimeBeforeSlicing.toLocaleTimeString();
+        const endTimeBeforeSlicingDate = createDate(endTime);
+        const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
+        const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
+        return endTimeOfExerciseAfterSliceInString;
+    },
+    validDuration: (endTime, startTime) => {
+        const endTimeAfterConvertToDate = createDate(endTime);
+        const startTimeAfterConvertToDate = createDate(startTime);
+        const endTimeAfterDoingLocalString = doLocaleHourString(endTimeAfterConvertToDate);
+        const startTimeAfterDoingLocalString = doLocaleHourString(startTimeAfterConvertToDate);
 
-        return endTimeOfExerciseAfterSlicing.slice(0, 5);
+        const endHourAfterSlice = doSliceInString(endTimeAfterDoingLocalString, 0, 2);
+        const startTimeAfterSlice = doSliceInString(startTimeAfterDoingLocalString, 0, 2);
+
+        let isValidDuration = false;
+
+        const durationOfHours = calculateDifference(endHourAfterSlice, startTimeAfterSlice);
+
+        if (durationOfHours > 0) {
+            isValidDuration = true;
+        } else {
+            if (durationOfHours === 0) {
+                const endMinutes = doSliceInString(endTimeAfterDoingLocalString, 3, 5);
+                const startMinutes = doSliceInString(startTimeAfterDoingLocalString, 3, 5);
+                const durationOfMinutes = calculateDifference(endMinutes, startMinutes);
+
+                if (durationOfMinutes > 0) {
+                    isValidDuration = true;
+                } else {
+                    isValidDuration = false;
+                }
+
+            } else {
+                isValidDuration = false;
+            }
+        }
+
+        return isValidDuration;
+    },
+    validDate: item => {
+        let isValidDate = false;
+        const startTimeOfExerciseBeforeLocaleTimeString = createDate(item.startTime);
+        const dateOfExerciseFromClient = createDate(item.date);
+
+        const dateOfToday = new Date;
+        const dateOfTodayAfterParsing = Date.parse(dateOfToday);
+        const dateOfExerciseAfterParsing = Date.parse(dateOfExerciseFromClient);
+
+        const dateOfTodayAfterLocaleDateString = doLocaleDateString(dateOfToday);
+        const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseFromClient)
+
+        const startTimeOfExerciseAfterLocaleTimeString = doLocaleHourString(startTimeOfExerciseBeforeLocaleTimeString);
+        const hourOfTodayAfterLocaleTimeString = doLocaleHourString(dateOfToday);
+
+        const startTimeOfExerciseWithoutColon = replaceString(startTimeOfExerciseAfterLocaleTimeString, /:/g, '');
+        const hourOfTodayWithoutColon = replaceString(hourOfTodayAfterLocaleTimeString, /:/g, '');
+
+        if (dateOfExerciseAfterLocaleDateString === dateOfTodayAfterLocaleDateString) {
+            if (startTimeOfExerciseWithoutColon < hourOfTodayWithoutColon) {
+                isValidDate = false;
+                return isValidDate;
+            } else {
+                isValidDate = true;
+                return isValidDate;
+            }
+        }
+
+        if (dateOfExerciseAfterParsing < dateOfTodayAfterParsing) {
+            isValidDate = false;
+        } else {
+            isValidDate = true;
+        }
+
+        return isValidDate;
     }
 }

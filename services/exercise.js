@@ -14,8 +14,6 @@ const makeUpdateExercise = (requestBodyKeysForUpdateExercise, requestBodyUpdateE
     requestBodyKeysForUpdateExercise.map(requestBodyKeysForUpdateExercise => {
         switch (requestBodyKeysForUpdateExercise) {
             case 'date':
-                console.log(requestBodyUpdateExercise);
-                console.log(exercise);
                 exercise[requestBodyKeysForUpdateExercise] = TimesService.dateOfExercise(requestBodyUpdateExercise);
                 break;
             case 'startTime':
@@ -32,43 +30,87 @@ const makeUpdateExercise = (requestBodyKeysForUpdateExercise, requestBodyUpdateE
     );
 };
 
+const checkingValidationHours = (endTime, startTime) => {
+    const isValid = TimesService.validDuration(endTime, startTime);
+    let message = '';
+    if (isValid === false) {
+        message = 'Invalid Start Time and End Time of exam';
+    }
+
+    return {
+        errorMessageForHours: message,
+        isValidHour: isValid
+    };
+};
+
+const checkingValidationDates = exercise => {
+    const isValid = TimesService.validDate(exercise);
+    let message = '';
+    if (isValid === false) {
+        message = 'Please select a valid date';
+    }
+
+    return {
+        isValidDate: isValid,
+        errorMessageForDates: message
+    };
+};
+
+const checkingValidationCourse = course => {
+    let isValidCourse = false;
+    if (course.length >= 3) {
+        isValidCourse = true;
+    }
+
+    return isValidCourse;
+};
+
 module.exports = {
     createExercise: async (exercise, userId) => {
-        const {
-            course,
-            // description,
-            // status,
-            // completed,
-            // messageTo
-        }
-            = exercise;
-
-        // const grade = Number(exercise.grade);
-        const duration = Number(exercise.duration);
+        const { course } = exercise;
+        const isValidCourse = checkingValidationCourse(course);
+        let { endTime, startTime } = exercise;
+        const { isValidHour, errorMessageForHours } = checkingValidationHours(endTime, startTime);
+        const { isValidDate, errorMessageForDates } = checkingValidationDates(exercise);
         const user = await User.findById(userId);
         const date = TimesService.dateOfExercise(exercise);
-        const startTime = TimesService.startTimeOfExercise(exercise);
-        const endTime = TimesService.endTimeOfExercise(exercise);
+        startTime = TimesService.startTimeOfExercise(exercise);
+        endTime = TimesService.endTimeOfExercise(exercise);
 
         exercise = new Exercise({
             user,
             course,
-            // grade,
-            // description,
-            // status,
-            // completed,
-            duration,
             startTime,
             endTime,
             date
         });
+        try {
+            if ((!isValidHour
+                || !isValidDate)
+                && isValidCourse) {
+                throw {
+                    hour: errorMessageForHours,
+                    date: errorMessageForDates
+                };
+            }
 
-        const { phone } = user;
-        const welcomeMessage = TwilioService.createWelcomeMessageToClient(user, exercise);
-        TwilioService.sendingSMSToClient(phone, welcomeMessage);
-        const newExercise = await exercise.save();
-
-        return newExercise;
+            const { phone } = user;
+            const newExercise = await exercise.save();
+            const welcomeMessage = TwilioService.createWelcomeMessageToClient(user, exercise);
+            TwilioService.sendingSMSToClient(phone, welcomeMessage);
+            return newExercise;
+        } catch (err) {
+            if (err.errors) {
+                err = {
+                    course: err.errors.course.message,
+                    hour: errorMessageForHours,
+                    date: errorMessageForDates
+                };
+            }
+            throw {
+                errors: err
+            }
+        }
     },
     getAllExercises: async () => {
         const exercises = await Exercise
@@ -99,9 +141,37 @@ module.exports = {
         makeUpdateExercise(requestBodyKeysForUpdateExercise, exerciseFromRequestBody, exercise);
         const welcomeMessage = TwilioService.updateMessageToClient(exercise);
         const { phone } = exercise.user;
-        TwilioService.sendingSMSToClient(exercise.user.phone, welcomeMessage);
+        TwilioService.sendingSMSToClient(phone, welcomeMessage);
         await exercise.save();
-
         return exercise;
-    }
-};
+    },
+    checkingValidationHours,
+    checkingValidationDates
+}
+
+    // ,
+//     checkingValidationHours: (endTime, startTime) => {
+//         const isValid = TimesService.validDuration(endTime, startTime);
+//         let message = '';
+//         if (isValid === false) {
+//             message = 'Invalid Start Time and End Time of exam';
+//         }
+
+//         return {
+//             errorMessageForHours: message,
+//             isValidHour: isValid
+//         };
+//     },
+//     checkingValidationDates: exercise => {
+//         const isValid = TimesService.validDate(exercise);
+//         let message = '';
+//         if (isValid === false) {
+//             message = 'Please select a valid date';
+//         }
+
+//         return {
+//             isValidDate: isValid,
+//             errorMessageForDates: message
+//         };
+//     }
+// }

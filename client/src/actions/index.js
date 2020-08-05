@@ -9,55 +9,115 @@ import {
     CREATE_EXERCISE,
     DELETE_EXERCISE,
     UPDATE_EXERCISE,
-    FETCH_EXERCISE
+    FETCH_EXERCISE,
+    USER_ERRORS,
+    EXERCISE_ERRORS
 } from './types';
 
 const URL = `http://localhost:5000`;
 
 ////Users
-export const fetchUsers = () => async dispatch => {
-    const response = await axios.get(`${URL}/users`);
+export const fetchUsers = () => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.get(`${URL}/users`);
+            dispatch({
+                type: FETCH_USERS,
+                payload: response.data.users
+            });
 
-    dispatch({
-        type: FETCH_USERS,
-        payload: response.data.users
-    });
+            return response;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
 };
 
-export const fetchUserById = userId => async dispatch => {
-    const response = await axios.get(`${URL}/users/${userId}`);
+export const fetchUserById = userId => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.get(`${URL}/users/${userId}`);
 
-    dispatch({
-        type: FETCH_USER,
-        payload: response.data.user
-    });
+            dispatch({
+                type: FETCH_USER,
+                payload: response.data.user
+            });
+            return response;
+        } catch (err) {
+            dispatch({
+                type: USER_ERRORS,
+                payload: err
+            });
+            return err;
+        }
+    }
 };
 
-export const createUser = (user, image) => async dispatch => {
-    const response = await axios.post(`${URL}/users`, image, user);
-    
-    dispatch({
-        type: CREATE_USER,
-        payload: response.data.newUser
-    });
+export const createUser = user => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.post(`${URL}/users`, user, {
+                onUploadProgress: progressEvent => {
+                    let uploadPercentage = parseInt(
+                        Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    );
+                    console.log(uploadPercentage);
+                }
+            });
+            dispatch({
+                type: CREATE_USER,
+                payload: response.data.newUser
+            });
+            console.log('response has arrived');
+
+            return response;
+        } catch (error) {
+            console.log(error.response);
+            dispatch({
+                type: USER_ERRORS,
+                payload: error.response.data
+            });
+            return error.response.data;
+        }
+    }
 };
 
 export const deleteUser = userId => async dispatch => {
-    await axios.delete(`${URL}/users/${userId}`);
-
-    dispatch({
-        type: DELETE_USER,
-        payload: userId
-    });
+    await axios.delete(`${URL}/users/${userId}`)
+        .then(() => {
+            dispatch({
+                type: DELETE_USER,
+                payload: userId
+            });
+        })
+        .catch(err => {
+            dispatch({
+                type: USER_ERRORS,
+                payload: err.response
+            });
+        })
 };
 
-export const updateUser = (userId, userPhone) => async dispatch => {
-    const response = await axios.patch(`${URL}/users/${userId}`, { phone: userPhone });
+export const updateUser = (userId, userPhone) => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.patch(`${URL}/users/${userId}`, { phone: userPhone })
+            dispatch({
+                type: UPDATE_USER,
+                payload: response.data
+            });
 
-    dispatch({
-        type: UPDATE_USER,
-        payload: response.data.phone
-    });
+            return response;
+        } catch (err) {
+            dispatch({
+                type: USER_ERRORS,
+                payload: err.response.data.errors
+            });
+
+            return err.response.data.errors;
+        }
+    }
 };
 
 
@@ -71,25 +131,44 @@ export const fetchExercises = () => async dispatch => {
     });
 };
 
-export const fetchExerciseById = exerciseId => async dispatch => {
-    const response = await axios.get(`${URL}/exercises/${exerciseId}`);
-
-    dispatch({
-        type: FETCH_EXERCISE,
-        payload: response.data.exercise
-    });
+export const fetchExerciseById = exerciseId => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.get(`${URL}/exercises/${exerciseId}`);
+            dispatch({
+                type: FETCH_EXERCISE,
+                payload: response.data.exercise
+            });
+            return response;
+        } catch (err) {
+            dispatch({
+                type: EXERCISE_ERRORS,
+                payload: err
+            });
+            return err;
+        }
+    }
 };
 
-export const createExercise = exercise => async dispatch => {
-    console.log(exercise);
-    const response = await axios.post(`${URL}/exercises/${exercise.userId}`, exercise);
+export const createExercise = (exercise, userId) => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.post(`${URL}/exercises/${userId}`, exercise);
 
-    console.log(response.data.newExercise);
+            dispatch({
+                type: CREATE_EXERCISE,
+                payload: response.data.newExercise
+            });
+            return response;
+        } catch (err) {
+            dispatch({
+                type: EXERCISE_ERRORS,
+                payload: err.response
+            });
 
-    dispatch({
-        type: CREATE_EXERCISE,
-        payload: response.data.newExercise
-    });
+            return err.response;
+        }
+    }
 };
 
 export const deleteExercise = exerciseId => async dispatch => {
@@ -101,11 +180,22 @@ export const deleteExercise = exerciseId => async dispatch => {
     });
 };
 
-export const updateExercise = (exercise, exerciseId) => async dispatch => {
-    const response = await axios.patch(`${URL}/exercises/${exerciseId}`, exercise);
+export const updateExercise = (exercise, exerciseId) => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.patch(`${URL}/exercises/${exerciseId}`, exercise);
 
-    dispatch({
-        type: UPDATE_EXERCISE,
-        payload: response.data.exercise
-    });
+            dispatch({
+                type: UPDATE_EXERCISE,
+                payload: response.data.exercise
+            });
+            return response;
+        } catch (error) {
+            dispatch({
+                type: EXERCISE_ERRORS,
+                payload: error.response.data.errors
+            });
+            return error.response.data.errors;
+        }
+    }
 };

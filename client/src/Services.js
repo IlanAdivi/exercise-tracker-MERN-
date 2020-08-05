@@ -3,7 +3,7 @@ export const isEmpty = item => {
 
     Object.keys(item).map(itemPropeties => {
         if (item[itemPropeties] === '' ||
-            item[itemPropeties] === null ||
+            // item[itemPropeties] === null ||
             item[itemPropeties] === undefined) {
             countOfEmptyItemProperties++;
         }

@@ -2,6 +2,7 @@ const ExerciseService = require('../../services/exercise');
 
 module.exports = {
     createExercise: async (req, res) => {
+        const { endTime, startTime } = req.body;
         try {
             const userId = req.params.id;
             const newExercise = await ExerciseService.createExercise(req.body, userId);
@@ -56,6 +57,19 @@ module.exports = {
         if (!isValidUpdating) {
             return res.status(400).send({
                 error: "Invalid updates"
+            });
+        }
+
+        const { endTime, startTime } = req.body;
+        const { isValidHour, errorMessageForHours } = ExerciseService.checkingValidationHours(endTime, startTime);
+        const { isValidDate, errorMessageForDates } = ExerciseService.checkingValidationDates(req.body);
+
+        if (!isValidHour || !isValidDate) {
+            return res.status(400).send({
+                errors: {
+                    hour: errorMessageForHours,
+                    date: errorMessageForDates
+                }
             });
         }
 
