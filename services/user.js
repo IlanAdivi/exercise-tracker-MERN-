@@ -2,7 +2,7 @@ const User = require('../models/user').User;
 const s3 = require('./s3');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: './config/dev.env' });
+dotenv.config({ path: '.env' });
 
 const uploadImageFromAmazon = async uploadingParams => {
     const s3Client = s3.s3Client;

@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: './config/dev.env' });
+dotenv.config({ path: '.env' });
 
 const {
     TWILIO_ACCOUNT_SID,
