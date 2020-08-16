@@ -20,7 +20,7 @@ const URL = `http://localhost:5000`;
 export const fetchUsers = () => {
     return async function (dispatch) {
         try {
-            const response = await axios.get(`${URL}/users`);
+            const response = await axios.get(`/users`);
             dispatch({
                 type: FETCH_USERS,
                 payload: response.data.users
@@ -123,7 +123,7 @@ export const updateUser = (userId, userPhone) => {
 
 ////Exercises
 export const fetchExercises = () => async dispatch => {
-    const response = await axios.get(`${URL}/exercises`);
+    const response = await axios.get(`/exercises`);
 
     dispatch({
         type: FETCH_EXERCISES,
