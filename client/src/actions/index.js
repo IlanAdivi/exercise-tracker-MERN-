@@ -14,8 +14,6 @@ import {
     EXERCISE_ERRORS
 } from './types';
 
-const URL = `http://localhost:5000`;
-
 ////Users
 export const fetchUsers = () => {
     return async function (dispatch) {
@@ -37,7 +35,7 @@ export const fetchUsers = () => {
 export const fetchUserById = userId => {
     return async function (dispatch) {
         try {
-            const response = await axios.get(`${URL}/users/${userId}`);
+            const response = await axios.get(`/users/${userId}`);
 
             dispatch({
                 type: FETCH_USER,
@@ -57,7 +55,7 @@ export const fetchUserById = userId => {
 export const createUser = user => {
     return async function (dispatch) {
         try {
-            const response = await axios.post(`${URL}/users`, user, {
+            const response = await axios.post(`/users`, user, {
                 onUploadProgress: progressEvent => {
                     let uploadPercentage = parseInt(
                         Math.round((progressEvent.loaded * 100) / progressEvent.total)
@@ -84,7 +82,7 @@ export const createUser = user => {
 };
 
 export const deleteUser = userId => async dispatch => {
-    await axios.delete(`${URL}/users/${userId}`)
+    await axios.delete(`/users/${userId}`)
         .then(() => {
             dispatch({
                 type: DELETE_USER,
@@ -102,7 +100,7 @@ export const deleteUser = userId => async dispatch => {
 export const updateUser = (userId, userPhone) => {
     return async function (dispatch) {
         try {
-            const response = await axios.patch(`${URL}/users/${userId}`, { phone: userPhone })
+            const response = await axios.patch(`/users/${userId}`, { phone: userPhone })
             dispatch({
                 type: UPDATE_USER,
                 payload: response.data
@@ -134,7 +132,7 @@ export const fetchExercises = () => async dispatch => {
 export const fetchExerciseById = exerciseId => {
     return async function (dispatch) {
         try {
-            const response = await axios.get(`${URL}/exercises/${exerciseId}`);
+            const response = await axios.get(`/exercises/${exerciseId}`);
             dispatch({
                 type: FETCH_EXERCISE,
                 payload: response.data.exercise
@@ -153,7 +151,7 @@ export const fetchExerciseById = exerciseId => {
 export const createExercise = (exercise, userId) => {
     return async function (dispatch) {
         try {
-            const response = await axios.post(`${URL}/exercises/${userId}`, exercise);
+            const response = await axios.post(`/exercises/${userId}`, exercise);
 
             dispatch({
                 type: CREATE_EXERCISE,
@@ -172,7 +170,7 @@ export const createExercise = (exercise, userId) => {
 };
 
 export const deleteExercise = exerciseId => async dispatch => {
-    await axios.delete(`${URL}/exercises/${exerciseId}`);
+    await axios.delete(`/exercises/${exerciseId}`);
 
     dispatch({
         type: DELETE_EXERCISE,
@@ -183,7 +181,7 @@ export const deleteExercise = exerciseId => async dispatch => {
 export const updateExercise = (exercise, exerciseId) => {
     return async function (dispatch) {
         try {
-            const response = await axios.patch(`${URL}/exercises/${exerciseId}`, exercise);
+            const response = await axios.patch(`/exercises/${exerciseId}`, exercise);
 
             dispatch({
                 type: UPDATE_EXERCISE,
