@@ -11,7 +11,6 @@ const FetchExercises = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const exercisesList = useSelector(state => {
-        console.log(state.exercises.exercises)
         return state.exercises.exercises
     });
     const dispatch = useDispatch();

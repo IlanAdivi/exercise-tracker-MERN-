@@ -32,6 +32,7 @@ const makeUpdateExercise = (requestBodyKeysForUpdateExercise, requestBodyUpdateE
 
 const checkingValidationHours = (endTime, startTime) => {
     const isValid = TimesService.validDuration(endTime, startTime);
+    console.log(isValid);
     let message = '';
     if (isValid === false) {
         message = 'Invalid Start Time and End Time of exam';

@@ -7,7 +7,6 @@ import LoadingForm from '../forms/LoadingForm';
 const FetchExercise = props => {
     const exerciseId = props.match.params.id;
     const selectedExercise = useSelector(state => {
-        console.log(state.exercises.selectedExercise);
         return state.exercises.selectedExercise
     });
 
