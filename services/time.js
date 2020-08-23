@@ -48,16 +48,22 @@ module.exports = {
         // return dateOfExerciseAfterLocaleDateString;
     },
     startTimeOfExercise: ({ startTime }) => {
-        const startTimeBeforeSlicingDate = createDate(startTime);
-        const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-        const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-        return startTimeOfExerciseAfterSliceInString;
+        const startTimeOfInput = moment.utc(startTime).local().format('LT');
+        // (startTime).local().format('LT');
+        console.log(startTimeOfInput);
+        // const startTimeBeforeSlicingDate = createDate(startTime);
+        // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+        // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+
+        return startTimeOfInput;
     },
     endTimeOfExercise: ({ endTime }) => {
-        const endTimeBeforeSlicingDate = createDate(endTime);
-        const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
-        const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
-        return endTimeOfExerciseAfterSliceInString;
+        const endTimeOfInput = moment.utc(endTime).local().format('LT');
+        console.log(endTimeOfInput)
+        // const endTimeBeforeSlicingDate = createDate(endTime);
+        // const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
+        // const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
+        return endTimeOfInput;
     },
     validDuration: (endTime, startTime) => {
         const endTimeAfterConvertToDate = createDate(endTime);
