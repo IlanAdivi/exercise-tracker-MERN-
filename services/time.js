@@ -33,16 +33,17 @@ module.exports = {
     dateOfExercise: ({ date }) => {
         // const now = moment();
 
-        // moment.locale('he')
-        // console.log(moment.locale());
-        // const dateOfInput = moment(date).format('l'); 
-        // console.log(dateOfInput);
+        moment.locale('he')
+        console.log(moment.locale());
+        const dateOfInput = moment(date).format('l'); 
+        console.log(dateOfInput);
 
-        // return 
-        const dateOfExerciseBeforeSlicing = createDate(date);
-        const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
 
-        return dateOfExerciseAfterLocaleDateString;
+        return dateOfInput;
+        // const dateOfExerciseBeforeSlicing = createDate(date);
+        // const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
+
+        // return dateOfExerciseAfterLocaleDateString;
     },
     startTimeOfExercise: ({ startTime }) => {
         const startTimeBeforeSlicingDate = createDate(startTime);

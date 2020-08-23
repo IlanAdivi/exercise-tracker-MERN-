@@ -86,14 +86,14 @@ module.exports = {
             date
         });
         try {
-            if ((!isValidHour
-                || !isValidDate)
-                && isValidCourse) {
-                throw {
-                    hour: errorMessageForHours,
-                    date: errorMessageForDates
-                };
-            }
+            // if ((!isValidHour
+            //     || !isValidDate)
+            //     && isValidCourse) {
+            //     throw {
+            //         hour: errorMessageForHours,
+            //         date: errorMessageForDates
+            //     };
+            // }
 
             const { phone } = user;
             const newExercise = await exercise.save();
