@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const doLocaleDateString = dateBeforeDoingLocalString => {
     const dateAfterDoingLocalString = dateBeforeDoingLocalString.toLocaleDateString();
     return dateAfterDoingLocalString;
@@ -29,6 +31,14 @@ const replaceString = (string, replaceValue, addValue) => {
 
 module.exports = {
     dateOfExercise: ({ date }) => {
+        // const now = moment();
+
+        // moment.locale('he')
+        // console.log(moment.locale());
+        // const dateOfInput = moment(date).format('l'); 
+        // console.log(dateOfInput);
+
+        // return 
         const dateOfExerciseBeforeSlicing = createDate(date);
         const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
 
