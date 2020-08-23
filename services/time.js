@@ -35,7 +35,9 @@ module.exports = {
 
         moment.locale('he')
         console.log(moment.locale());
-        const dateOfInput = moment(date).format('l'); 
+        const dateOfInput = moment.utc(date).local().format('l'); 
+        // console.log(moment.utc(date, 'DD/MM/YYYY').unix());
+        // console.log(moment(input_date).format("dddd, MMMM Do YYYY h:mm:ss A"));
         console.log(dateOfInput);
 
 
