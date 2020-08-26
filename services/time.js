@@ -25,16 +25,16 @@ const calculateDifference = (end, start) => {
     return result;
 };
 
-const checkingLessThanTen = hourOfInput => {
-    let isLessThanTen = true;
-    if (hourOfInput >= 10) {
-        isLessThanTen = false;
-    } else {
-        isLessThanTen = true;
-    }
+// const checkingLessThanTen = hourOfInput => {
+//     let isLessThanTen = true;
+//     if (hourOfInput >= 10) {
+//         isLessThanTen = false;
+//     } else {
+//         isLessThanTen = true;
+//     }
 
-    return isLessThanTen;
-};
+//     return isLessThanTen;
+// };
 
 const replaceString = (string, replaceValue, addValue) => {
     return string.replace(replaceValue, addValue);
@@ -42,80 +42,40 @@ const replaceString = (string, replaceValue, addValue) => {
 
 const findSemicolon = (string) => {
     const indexOfSemicolon = string.indexOf(':');
-    // console.log(indexOfSemicolon);
     return indexOfSemicolon;
 };
 
+const timeOfExercise = time => {
+    const timeOfInput = moment.utc(time).local().format('LT');
+    if (timeOfInput.includes('AM') === false &&
+        timeOfInput.includes('PM') === false) {
+        return timeOfInput;
+    }
+
+    const indexOfSemicolon = findSemicolon(timeOfInput);
+    const hourOftimeOfInputAfterSlice = timeOfInput.slice(0, indexOfSemicolon);
+    const timeOfInputAfterSlicing = hourOftimeOfInputAfterSlice < 10 ?
+        `0${timeOfInput.substr(0, timeOfInput.length - 2)}`
+        :
+        `${timeOfInput.substr(0, timeOfInput.length - 2)}`
+        ;
+
+    if (timeOfInput.includes('AM')) {
+        return timeOfInputAfterSlicing;
+    } else if (timeOfInput.includes('PM')) {
+        const newHourOfTimeOfInputAfterSlice = Number(hourOftimeOfInputAfterSlice) + 12;
+        const timeOfInputWithoutOldHour = timeOfInput.slice(indexOfSemicolon, timeOfInput.length - 2);
+        const newTimeOfInputAfterSlicing = `${newHourOfTimeOfInputAfterSlice}${timeOfInputWithoutOldHour}`;
+        return newTimeOfInputAfterSlicing;
+    }
+};
+
 const startTimeOfExercise = ({ startTime }) => {
-    ////Trying maybe to separate between two cases:
-    ////1)PRODUCTION
-    ////2)LOCAL DEVELOPMENT
-    const startTimeOfInput = moment.utc(startTime).local().format('LT');
-    // (startTime).local().format('LT');
-
-    // console.log(startTimeOfInput);
-
-    // const startTimeBeforeSlicingDate = createDate(startTime);
-    // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-    // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-
-    // if (process.env.NODE_ENV === 'production') {
-    //     return startTimeOfInput;
-    // } else {
-    //     const startTimeBeforeSlicingDate = createDate(startTime);
-    //     const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-    //     const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-    //     return startTimeOfExerciseAfterSliceInString;
-    // }
-    return startTimeOfInput;
+    return timeOfExercise(startTime);
 };
 
 const endTimeOfExercise = ({ endTime }) => {
-    const endTimeOfInput = moment.utc(endTime).local().format('LT');
-    if (endTimeOfInput.includes('AM') === false &&
-        endTimeOfInput.includes('PM') === false)
-        return endTimeOfInput;
-
-    const indexOfSemicolon = findSemicolon(endTimeOfInput);
-    const hourOfEndTimeOfInputAfterSlice = endTimeOfInput.slice(0, indexOfSemicolon);
-
-    console.log(endTimeOfInput);
-    let endTimeOfInputAfterSlicing = hourOfEndTimeOfInputAfterSlice < 10 ?
-        `0${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
-        :
-        `${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
-        ;
-
-    if (endTimeOfInput.includes('AM')) {
-
-        console.log(endTimeOfInputAfterSlicing);
-        return endTimeOfInputAfterSlicing;
-    } else if (endTimeOfInput.includes('PM')) {
-
-        return endTimeOfInputAfterSlicing;
-        // let endTimeOfInputAfterSlicing = hourOfEndTimeOfInputAfterSlice < 10 ?
-        //     `0${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
-        //     :
-        //     `${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
-        //     ;
-        // console.log(endTimeOfInputAfterSlicing);
-        // return endTimeOfInputAfterSlicing;
-
-        // const endTimeOfInputAfterSlicingPM = endTimeOfInput.substr(0, endTimeOfInput.length - 2);
-        // console.log(endTimeOfInputAfterSlicingPM);
-        // return endTimeOfInputAfterSlicingPM;
-
-        // if (isLessThanTen) {
-        //     const endTimeOfInputAfterSlicingPM = `0${endTimeOfInput}`;
-        //     console.log(endTimeOfInputAfterSlicingPM);
-        //     return endTimeOfInputAfterSlicingPM;
-        // }
-        // else {
-        //     const endTimeOfInputAfterSlicingPM = endTimeOfInput.substr(0, endTimeOfInput.length - 2);
-        //     console.log(endTimeOfInputAfterSlicingPM);
-        //     return endTimeOfInputAfterSlicingPM;
-        // }
-    }
+    return timeOfExercise(endTime);
 }
 
 module.exports = {

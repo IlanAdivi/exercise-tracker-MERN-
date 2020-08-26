@@ -65,14 +65,14 @@ module.exports = {
         const { isValidHour, errorMessageForHours } = ExerciseService.checkingValidationHours(endTime, startTime);
         const { isValidDate, errorMessageForDates } = ExerciseService.checkingValidationDates(req.body);
 
-        // if (!isValidHour || !isValidDate) {
-        //     return res.status(400).send({
-        //         errors: {
-        //             hour: errorMessageForHours,
-        //             date: errorMessageForDates
-        //         }
-        //     });
-        // }
+        if (!isValidHour || !isValidDate) {
+            return res.status(400).send({
+                errors: {
+                    hour: errorMessageForHours,
+                    date: errorMessageForDates
+                }
+            });
+        }
 
         const exerciseId = req.params.id;
         try {
