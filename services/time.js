@@ -72,8 +72,8 @@ const startTimeOfExercise = ({ startTime }) => {
 
 const endTimeOfExercise = ({ endTime }) => {
     const endTimeOfInput = moment.utc(endTime).local().format('LT');
-    if (!endTimeOfInput.includes('AM') &&
-        !endTimeOfInput.includes('PM'))
+    if (endTimeOfInput.includes('AM') === false &&
+        endTimeOfInput.includes('PM') === false)
         return endTimeOfInput;
 
     const indexOfSemicolon = findSemicolon(endTimeOfInput);
