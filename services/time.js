@@ -25,20 +25,110 @@ const calculateDifference = (end, start) => {
     return result;
 };
 
+const checkingLessThanTen = hourOfInput => {
+    let isLessThanTen = true;
+    if (hourOfInput >= 10) {
+        isLessThanTen = false;
+    } else {
+        isLessThanTen = true;
+    }
+
+    return isLessThanTen;
+};
+
 const replaceString = (string, replaceValue, addValue) => {
     return string.replace(replaceValue, addValue);
 };
+
+const findSemicolon = (string) => {
+    const indexOfSemicolon = string.indexOf(':');
+    // console.log(indexOfSemicolon);
+    return indexOfSemicolon;
+};
+
+const startTimeOfExercise = ({ startTime }) => {
+    ////Trying maybe to separate between two cases:
+    ////1)PRODUCTION
+    ////2)LOCAL DEVELOPMENT
+    const startTimeOfInput = moment.utc(startTime).local().format('LT');
+    // (startTime).local().format('LT');
+
+    // console.log(startTimeOfInput);
+
+    // const startTimeBeforeSlicingDate = createDate(startTime);
+    // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+    // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+
+    // if (process.env.NODE_ENV === 'production') {
+    //     return startTimeOfInput;
+    // } else {
+    //     const startTimeBeforeSlicingDate = createDate(startTime);
+    //     const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+    //     const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+    //     return startTimeOfExerciseAfterSliceInString;
+    // }
+    return startTimeOfInput;
+};
+
+const endTimeOfExercise = ({ endTime }) => {
+    const endTimeOfInput = moment.utc(endTime).local().format('LT');
+    if (!endTimeOfInput.includes('AM') &&
+        !endTimeOfInput.includes('PM'))
+        return endTimeOfInput;
+
+    const indexOfSemicolon = findSemicolon(endTimeOfInput);
+    const hourOfEndTimeOfInputAfterSlice = endTimeOfInput.slice(0, indexOfSemicolon);
+
+    console.log(endTimeOfInput);
+    let endTimeOfInputAfterSlicing = hourOfEndTimeOfInputAfterSlice < 10 ?
+        `0${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
+        :
+        `${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
+        ;
+
+    if (endTimeOfInput.includes('AM')) {
+
+        console.log(endTimeOfInputAfterSlicing);
+        return endTimeOfInputAfterSlicing;
+    } else if (endTimeOfInput.includes('PM')) {
+
+        return endTimeOfInputAfterSlicing;
+        // let endTimeOfInputAfterSlicing = hourOfEndTimeOfInputAfterSlice < 10 ?
+        //     `0${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
+        //     :
+        //     `${endTimeOfInput.substr(0, endTimeOfInput.length - 2)}`
+        //     ;
+        // console.log(endTimeOfInputAfterSlicing);
+        // return endTimeOfInputAfterSlicing;
+
+        // const endTimeOfInputAfterSlicingPM = endTimeOfInput.substr(0, endTimeOfInput.length - 2);
+        // console.log(endTimeOfInputAfterSlicingPM);
+        // return endTimeOfInputAfterSlicingPM;
+
+        // if (isLessThanTen) {
+        //     const endTimeOfInputAfterSlicingPM = `0${endTimeOfInput}`;
+        //     console.log(endTimeOfInputAfterSlicingPM);
+        //     return endTimeOfInputAfterSlicingPM;
+        // }
+        // else {
+        //     const endTimeOfInputAfterSlicingPM = endTimeOfInput.substr(0, endTimeOfInput.length - 2);
+        //     console.log(endTimeOfInputAfterSlicingPM);
+        //     return endTimeOfInputAfterSlicingPM;
+        // }
+    }
+}
 
 module.exports = {
     dateOfExercise: ({ date }) => {
         // const now = moment();
 
         moment.locale('he')
-        console.log(moment.locale());
-        const dateOfInput = moment.utc(date).local().format('l'); 
+        // console.log(moment.locale());
+        const dateOfInput = moment.utc(date).local().format('l');
         // console.log(moment.utc(date, 'DD/MM/YYYY').unix());
         // console.log(moment(input_date).format("dddd, MMMM Do YYYY h:mm:ss A"));
-        console.log(dateOfInput);
+
+        // console.log(dateOfInput); ///necessary!!!!!!
 
 
         return dateOfInput;
@@ -47,24 +137,33 @@ module.exports = {
 
         // return dateOfExerciseAfterLocaleDateString;
     },
-    startTimeOfExercise: ({ startTime }) => {
-        const startTimeOfInput = moment.utc(startTime).local().format('LT');
-        // (startTime).local().format('LT');
-        console.log(startTimeOfInput);
-        // const startTimeBeforeSlicingDate = createDate(startTime);
-        // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-        // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-
-        return startTimeOfInput;
-    },
-    endTimeOfExercise: ({ endTime }) => {
-        const endTimeOfInput = moment.utc(endTime).local().format('LT');
-        console.log(endTimeOfInput)
-        // const endTimeBeforeSlicingDate = createDate(endTime);
-        // const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
-        // const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
-        return endTimeOfInput;
-    },
+    // startTimeOfExercise: ({ startTime }) => {
+    //     ////Trying maybe to separate between two cases:
+    //     ////1)PRODUCTION
+    //     ////2)LOCAL DEVELOPMENT
+    //     const startTimeOfInput = moment.utc(startTime).local().format('LT');
+    //     // (startTime).local().format('LT');
+    //     console.log(startTimeOfInput);
+    //     // const startTimeBeforeSlicingDate = createDate(startTime);
+    //     // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+    //     // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+    //     if (process.env.NODE_ENV === 'production') {
+    //         return startTimeOfInput;
+    //     } else {
+    //         const startTimeBeforeSlicingDate = createDate(startTime);
+    //         const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
+    //         const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
+    //         return startTimeOfExerciseAfterSliceInString;
+    //     }
+    // },
+    // endTimeOfExercise: ({ endTime }) => {
+    //     const endTimeOfInput = moment.utc(endTime).local().format('LT');
+    //     console.log(endTimeOfInput)
+    //     // const endTimeBeforeSlicingDate = createDate(endTime);
+    //     // const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
+    //     // const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
+    //     return endTimeOfInput;
+    // },
     validDuration: (endTime, startTime) => {
         const endTimeAfterConvertToDate = createDate(endTime);
         const startTimeAfterConvertToDate = createDate(startTime);
@@ -72,7 +171,9 @@ module.exports = {
         const startTimeAfterDoingLocalString = doLocaleHourString(startTimeAfterConvertToDate);
 
         const endHourAfterSlice = doSliceInString(endTimeAfterDoingLocalString, 0, 2);
+        // console.log(endHourAfterSlice);
         const startTimeAfterSlice = doSliceInString(startTimeAfterDoingLocalString, 0, 2);
+        // console.log(startTimeAfterSlice);
 
         let isValidDuration = false;
 
@@ -134,5 +235,7 @@ module.exports = {
         }
 
         return isValidDate;
-    }
+    },
+    startTimeOfExercise,
+    endTimeOfExercise
 }
