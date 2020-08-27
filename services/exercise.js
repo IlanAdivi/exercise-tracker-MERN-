@@ -149,30 +149,3 @@ module.exports = {
     checkingValidationHours,
     checkingValidationDates
 }
-
-    // ,
-//     checkingValidationHours: (endTime, startTime) => {
-//         const isValid = TimesService.validDuration(endTime, startTime);
-//         let message = '';
-//         if (isValid === false) {
-//             message = 'Invalid Start Time and End Time of exam';
-//         }
-
-//         return {
-//             errorMessageForHours: message,
-//             isValidHour: isValid
-//         };
-//     },
-//     checkingValidationDates: exercise => {
-//         const isValid = TimesService.validDate(exercise);
-//         let message = '';
-//         if (isValid === false) {
-//             message = 'Please select a valid date';
-//         }
-
-//         return {
-//             isValidDate: isValid,
-//             errorMessageForDates: message
-//         };
-//     }
-// }

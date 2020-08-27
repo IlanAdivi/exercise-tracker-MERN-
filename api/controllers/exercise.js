@@ -2,8 +2,6 @@ const ExerciseService = require('../../services/exercise');
 
 module.exports = {
     createExercise: async (req, res) => {
-        // req.log.info('something');
-        const { endTime, startTime } = req.body;
         try {
             const userId = req.params.id;
             const newExercise = await ExerciseService.createExercise(req.body, userId);
