@@ -87,52 +87,32 @@ module.exports = {
         const dateOfInput = moment.utc(date).local().format('l');
         // console.log(moment.utc(date, 'DD/MM/YYYY').unix());
         // console.log(moment(input_date).format("dddd, MMMM Do YYYY h:mm:ss A"));
-
-        // console.log(dateOfInput); ///necessary!!!!!!
-
-
-        return dateOfInput;
+        const newDateOfInput = dateOfInput.split('/').join('.');
+        console.log(newDateOfInput);
+        return newDateOfInput;
         // const dateOfExerciseBeforeSlicing = createDate(date);
         // const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
 
         // return dateOfExerciseAfterLocaleDateString;
     },
-    // startTimeOfExercise: ({ startTime }) => {
-    //     ////Trying maybe to separate between two cases:
-    //     ////1)PRODUCTION
-    //     ////2)LOCAL DEVELOPMENT
-    //     const startTimeOfInput = moment.utc(startTime).local().format('LT');
-    //     // (startTime).local().format('LT');
-    //     console.log(startTimeOfInput);
-    //     // const startTimeBeforeSlicingDate = createDate(startTime);
-    //     // const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-    //     // const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-    //     if (process.env.NODE_ENV === 'production') {
-    //         return startTimeOfInput;
-    //     } else {
-    //         const startTimeBeforeSlicingDate = createDate(startTime);
-    //         const startTimeOfExerciseAfterLocalHourString = doLocaleHourString(startTimeBeforeSlicingDate)
-    //         const startTimeOfExerciseAfterSliceInString = doSliceInString(startTimeOfExerciseAfterLocalHourString, 0, 5);
-    //         return startTimeOfExerciseAfterSliceInString;
-    //     }
-    // },
-    // endTimeOfExercise: ({ endTime }) => {
-    //     const endTimeOfInput = moment.utc(endTime).local().format('LT');
-    //     console.log(endTimeOfInput)
-    //     // const endTimeBeforeSlicingDate = createDate(endTime);
-    //     // const endimeOfExerciseAfterLocalHourString = doLocaleHourString(endTimeBeforeSlicingDate);
-    //     // const endTimeOfExerciseAfterSliceInString = doSliceInString(endimeOfExerciseAfterLocalHourString, 0, 5);
-    //     return endTimeOfInput;
-    // },
     validDuration: (endTime, startTime) => {
         const endTimeAfterConvertToDate = createDate(endTime);
         const startTimeAfterConvertToDate = createDate(startTime);
         const endTimeAfterDoingLocalString = doLocaleHourString(endTimeAfterConvertToDate);
+        // console.log(endTimeAfterDoingLocalString);
         const startTimeAfterDoingLocalString = doLocaleHourString(startTimeAfterConvertToDate);
+        // console.log(startTimeAfterDoingLocalString);
 
-        const endHourAfterSlice = doSliceInString(endTimeAfterDoingLocalString, 0, 2);
+
+
+        // console.log(endTime);
+        const hourOfEndTime = timeOfExercise(endTime);
+        // console.log(hourOfEndTime);
+        const hourOfStartTime = timeOfExercise(startTime);
+        // console.log(hourOfStartTime);
+        const endHourAfterSlice = hourOfEndTime.slice(0, 2);
         // console.log(endHourAfterSlice);
-        const startTimeAfterSlice = doSliceInString(startTimeAfterDoingLocalString, 0, 2);
+        const startTimeAfterSlice = hourOfStartTime.slice(0, 2);
         // console.log(startTimeAfterSlice);
 
         let isValidDuration = false;
@@ -143,8 +123,8 @@ module.exports = {
             isValidDuration = true;
         } else {
             if (durationOfHours === 0) {
-                const endMinutes = doSliceInString(endTimeAfterDoingLocalString, 3, 5);
-                const startMinutes = doSliceInString(startTimeAfterDoingLocalString, 3, 5);
+                const endMinutes = hourOfEndTime.slice(3, 5);
+                const startMinutes = hourOfStartTime.slice(3, 5);
                 const durationOfMinutes = calculateDifference(endMinutes, startMinutes);
 
                 if (durationOfMinutes > 0) {
