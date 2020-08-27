@@ -15,29 +15,9 @@ const createDate = string => {
     return date;
 };
 
-const doSliceInString = (stringBeforeSlicing, startIndex, endIndex) => {
-    const stringAfterSlicing = stringBeforeSlicing.slice(startIndex, endIndex);
-    return stringAfterSlicing;
-};
-
 const calculateDifference = (end, start) => {
     const result = end - start;
     return result;
-};
-
-// const checkingLessThanTen = hourOfInput => {
-//     let isLessThanTen = true;
-//     if (hourOfInput >= 10) {
-//         isLessThanTen = false;
-//     } else {
-//         isLessThanTen = true;
-//     }
-
-//     return isLessThanTen;
-// };
-
-const replaceString = (string, replaceValue, addValue) => {
-    return string.replace(replaceValue, addValue);
 };
 
 const findSemicolon = (string) => {
@@ -78,23 +58,22 @@ const endTimeOfExercise = ({ endTime }) => {
     return timeOfExercise(endTime);
 }
 
+const dateOfExercise = ({ date }) => {
+    moment.locale('he')
+    const dateOfInput = moment.utc(date).local().format('l');
+    const newDateOfInput = dateOfInput.split('/').join('.');
+    // console.log(newDateOfInput);
+    return newDateOfInput;
+};
+
 module.exports = {
-    dateOfExercise: ({ date }) => {
-        // const now = moment();
-
-        moment.locale('he')
-        // console.log(moment.locale());
-        const dateOfInput = moment.utc(date).local().format('l');
-        // console.log(moment.utc(date, 'DD/MM/YYYY').unix());
-        // console.log(moment(input_date).format("dddd, MMMM Do YYYY h:mm:ss A"));
-        const newDateOfInput = dateOfInput.split('/').join('.');
-        console.log(newDateOfInput);
-        return newDateOfInput;
-        // const dateOfExerciseBeforeSlicing = createDate(date);
-        // const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseBeforeSlicing);
-
-        // return dateOfExerciseAfterLocaleDateString;
-    },
+    // dateOfExercise: ({ date }) => {
+    //     moment.locale('he')
+    //     const dateOfInput = moment.utc(date).local().format('l');
+    //     const newDateOfInput = dateOfInput.split('/').join('.');
+    //     // console.log(newDateOfInput);
+    //     return newDateOfInput;
+    // },
     validDuration: (endTime, startTime) => {
         const endTimeAfterConvertToDate = createDate(endTime);
         const startTimeAfterConvertToDate = createDate(startTime);
@@ -140,26 +119,51 @@ module.exports = {
 
         return isValidDuration;
     },
-    validDate: item => {
+    validDate: dateOfInput => {
         let isValidDate = false;
-        const startTimeOfExerciseBeforeLocaleTimeString = createDate(item.startTime);
-        const dateOfExerciseFromClient = createDate(item.date);
+        // const startTimeOfExerciseBeforeLocaleTimeString = createDate(dateOfInput.startTime);
+        const dateOfExerciseFromClient = createDate(dateOfInput.date);
+
+        console.log(dateOfInput.startTime);
 
         const dateOfToday = new Date;
+        console.log(dateOfToday);
         const dateOfTodayAfterParsing = Date.parse(dateOfToday);
+        // console.log(dateOfTodayAfterParsing);
         const dateOfExerciseAfterParsing = Date.parse(dateOfExerciseFromClient);
+        // console.log(dateOfExerciseAfterParsing);
 
-        const dateOfTodayAfterLocaleDateString = doLocaleDateString(dateOfToday);
-        const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseFromClient)
+        // const dateOfTodayAfterLocaleDateString = doLocaleDateString(dateOfToday);
+        // console.log(dateOfTodayAfterLocaleDateString);
+        const dateOfTodayAfterLocaleDate = dateOfExercise(dateOfToday);
+        // console.log(dateOfTodayAfterLocaleDate);
 
-        const startTimeOfExerciseAfterLocaleTimeString = doLocaleHourString(startTimeOfExerciseBeforeLocaleTimeString);
-        const hourOfTodayAfterLocaleTimeString = doLocaleHourString(dateOfToday);
+        // const dateOfExerciseAfterLocaleDateString = doLocaleDateString(dateOfExerciseFromClient)
+        // console.log(dateOfExerciseAfterLocaleDateString);
 
-        const startTimeOfExerciseWithoutColon = replaceString(startTimeOfExerciseAfterLocaleTimeString, /:/g, '');
-        const hourOfTodayWithoutColon = replaceString(hourOfTodayAfterLocaleTimeString, /:/g, '');
+        const dateOfExerciseAfterLocaleDate = dateOfExercise(dateOfInput);
+        // console.log(dateOfExerciseAfterLocaleDate);
 
-        if (dateOfExerciseAfterLocaleDateString === dateOfTodayAfterLocaleDateString) {
-            if (startTimeOfExerciseWithoutColon < hourOfTodayWithoutColon) {
+        // const startTimeOfExerciseAfterLocaleTimeString = doLocaleHourString(startTimeOfExerciseBeforeLocaleTimeString);
+        // console.log(startTimeOfExerciseAfterLocaleTimeString);
+
+        const startTimeOfExerciseFromInput = startTimeOfExercise(dateOfInput);
+        // console.log(startTimeOfExerciseFromInput);
+
+        // const timeOfDayAfterLocaleTimeString = doLocaleHourString(dateOfToday);
+        // console.log(hourOfTodayAfterLocaleTimeString);
+
+        const timeOfDay = timeOfExercise(dateOfToday);
+        // console.log(timeOfDay);
+
+
+        const startTimeOfExerciseWithoutColon = startTimeOfExerciseFromInput.replace(/:/g, '');
+        // console.log(startTimeOfExerciseWithoutColon);
+        const timeOfDayWithoutColon = timeOfDay.replace(/:/g, '');
+        // console.log(timeOfDayWithoutColon);
+
+        if (dateOfExerciseAfterLocaleDate === dateOfTodayAfterLocaleDate) {
+            if (startTimeOfExerciseWithoutColon < timeOfDayWithoutColon) {
                 isValidDate = false;
                 return isValidDate;
             } else {
@@ -177,5 +181,6 @@ module.exports = {
         return isValidDate;
     },
     startTimeOfExercise,
-    endTimeOfExercise
+    endTimeOfExercise,
+    dateOfExercise
 }
