@@ -3,19 +3,19 @@ const cors = require('cors');
 const path = require('path');
 const userRouter = require('./api/routes/user');
 const exerciseRouter = require('./api/routes/exercise');
-// const pino = require('pino-http')()
 
 require('./db/mongoose');
 
 const app = express();
 
-// app.use(pino)
-
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: `http://localhost:5000`
+}));
 app.use(userRouter);
 app.use(exerciseRouter);
-// app.use(express.static(path.join(__dirname, 'client/build')));
+
+////Disable cache
 app.disable('etag');
 
 if (process.env.NODE_ENV === 'production') {
