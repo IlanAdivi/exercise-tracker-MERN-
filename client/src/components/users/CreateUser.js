@@ -180,6 +180,7 @@ const CreateUser = () => {
                                     style={{ cursor: 'pointer' }}
                                     value="Create"
                                 />
+                                <br />
                             </Form>
                         )
                     }}
