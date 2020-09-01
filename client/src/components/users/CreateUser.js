@@ -177,10 +177,8 @@ const CreateUser = () => {
                                     type="submit"
                                     className="ui submit black button"
                                     disabled={isEmpty(values) ? true : false}
-                                    style={{ cursor: 'pointer' }}
                                     value="Create"
                                 />
-                                <br />
                             </Form>
                         )
                     }}
