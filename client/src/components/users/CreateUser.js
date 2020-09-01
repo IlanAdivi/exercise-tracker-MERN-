@@ -33,21 +33,16 @@ const CreateUser = () => {
                     }}
                     validate={values => {
                         let errors = {};
-                        if (!values.firstname) {
-                            errors.firstname = "Field is required";
-                        }
 
-                        if (!values.lastname) {
-                            errors.lastname = "Field is required";
-                        }
+                        Object.keys(values).map(key => {
+                            if (values[key] === '' &&
+                                key !== 'image') {
+                                errors[key] = `Field ${key} is required`;
+                            }
 
-                        if (!values.kind) {
-                            errors.kind = "Field is required";
-                        }
+                            return key;
+                        });
 
-                        if (!values.phone) {
-                            errors.phone = "Field is required";
-                        }
                         return errors;
                     }}
                 >
@@ -68,20 +63,14 @@ const CreateUser = () => {
                                         if (response.status === 201) {
                                             history.push('/user/add/confirm');
                                         } else {
-                                            if (response.error.errors.firstname) {
-                                                setFieldError('firstname', response.error.errors.firstname.message);
-                                            }
+                                            if (response.error) {
+                                                Object.keys(response.error.errors).map(key => {
+                                                    if (response.error.errors[key]) {
+                                                        setFieldError(`${key}`, response.error.errors[key].message);
+                                                    }
 
-                                            if (response.error.errors.lastname) {
-                                                setFieldError('lastname', response.error.errors.lastname.message);
-                                            }
-
-                                            if (response.error.errors.kind) {
-                                                setFieldError('kind', response.error.errors.kind.message);
-                                            }
-
-                                            if (response.error.errors.phone) {
-                                                setFieldError('phone', response.error.errors.phone.message);
+                                                    return key;
+                                                });
                                             }
 
                                             if (response.message) {
@@ -188,6 +177,7 @@ const CreateUser = () => {
                                     type="submit"
                                     className="ui submit black button"
                                     disabled={isEmpty(values) ? true : false}
+                                    style={{ cursor: 'pointer' }}
                                     value="Create"
                                 />
                             </Form>

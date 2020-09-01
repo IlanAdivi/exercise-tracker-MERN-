@@ -19,7 +19,6 @@ import { useHistory } from 'react-router-dom';
 const FetchUsers = () => {
     const [loading, setLoading] = useState(true);
     const usersList = useSelector(state => {
-        console.log(state.users.users);
         return state.users.users;
     });
     // , message
@@ -58,8 +57,6 @@ const FetchUsers = () => {
     };
 
     const renderFetchUsers = () => {
-        console.log(usersList);
-
         return (
             <div className="ui container">
                 <br></br>

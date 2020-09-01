@@ -62,9 +62,9 @@ const CreateExercise = () => {
             <Formik
                 initialValues={{
                     course: '',
-                    startTime: null,
-                    endTime: null,
-                    date: null
+                    startTime: undefined,
+                    endTime: undefined,
+                    date: undefined
                 }}
                 validate={exercise => {
                     let errors = {};
