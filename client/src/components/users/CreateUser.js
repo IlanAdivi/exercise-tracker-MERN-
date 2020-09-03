@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createUser } from '../../actions/index';
-import { isEmpty } from '../../Services';
+import { isEmpty, findEmptyFieldsInCreatingUser } from '../../Services';
 import CustomButton from '../forms/CustomButton';
 
 const CreateUser = () => {
@@ -15,6 +15,22 @@ const CreateUser = () => {
 
     const handleClick = e => {
         hiddenFileInput.current.click();
+    };
+
+    const makeFile = (file, item) => {
+        const {
+            firstname,
+            lastname,
+            kind,
+            phone,
+            image
+        }
+            = item;
+        file.set(`${firstname}`, firstname);
+        file.set(`${lastname}`, lastname);
+        file.set(`${kind}`, kind);
+        file.set(`${phone}`, phone);
+        file.append(`${image}`, image);
     };
 
     const renderCreateUser = () => {
@@ -33,16 +49,7 @@ const CreateUser = () => {
                     }}
                     validate={values => {
                         let errors = {};
-
-                        Object.keys(values).map(key => {
-                            if (values[key] === '' &&
-                                key !== 'image') {
-                                errors[key] = `Field ${key} is required`;
-                            }
-
-                            return key;
-                        });
-
+                        errors = findEmptyFieldsInCreatingUser(values, errors);
                         return errors;
                     }}
                 >
@@ -52,11 +59,7 @@ const CreateUser = () => {
                                 onSubmit={async e => {
                                     e.preventDefault();
                                     const file = new FormData(e.target);
-                                    file.set('firstname', values.firstname);
-                                    file.set('lastname', values.lastname);
-                                    file.set('kind', values.kind);
-                                    file.set('phone', values.phone);
-                                    file.append("image", values.image);
+                                    makeFile(file, values);
 
                                     try {
                                         const response = await dispatch(createUser(file));
@@ -116,7 +119,26 @@ const CreateUser = () => {
                                                 component="div"
                                                 style={{ color: errors.lastname ? 'red' : '' }} />
                                         </div>
-
+                                        <div className="field">
+                                            <label>Image</label>
+                                            <div
+                                                className="ui button"
+                                                onClick={handleClick}>
+                                                Attach Image
+                                            </div>
+                                            <Field
+                                                type="file"
+                                                name="image"
+                                                innerRef={hiddenFileInput}
+                                                encType="multipart/form-data"
+                                                onKeyUp={handleChange}
+                                                style={{ display: 'none' }}
+                                                value={values.image || ''}
+                                            />
+                                            <div>
+                                                {values.image ? values.image.slice(12, values.image.length) : ''}
+                                            </div>
+                                        </div>
                                         <div className="field">
                                             <label>Kind</label>
                                             <Field
@@ -145,27 +167,6 @@ const CreateUser = () => {
                                                 component="div"
                                                 style={{ color: errors.phone ? 'red' : '' }} />
                                         </div>
-                                        <div className="field">
-                                            <label>Attach Image</label>
-                                            <div
-                                                className="ui button"
-                                                onClick={handleClick}>
-                                                Browse
-                                            </div>
-                                            <Field
-                                                type="file"
-                                                name="image"
-                                                innerRef={hiddenFileInput}
-                                                encType="multipart/form-data"
-                                                onKeyUp={handleChange}
-                                                style={{ display: 'none' }}
-                                                value={values.image || ''}
-                                            />
-                                            <div>
-                                                {values.image ? values.image.slice(12, values.image.length) : ''}
-                                            </div>
-                                        </div>
-
                                     </ div>
                                 </ div>
                                 <div

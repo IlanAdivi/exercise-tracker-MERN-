@@ -77,7 +77,6 @@ const CreateExercise = () => {
                     return (
                         <Form
                             onSubmit={async e => {
-                                console.log(values);
                                 e.preventDefault();
                                 const response = await dispatch(createExercise(values, exercise.userId));
                                 if (response.status === 201) {

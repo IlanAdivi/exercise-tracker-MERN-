@@ -7,6 +7,7 @@ import { updateUser, fetchUserById } from '../../actions/index';
 import { Formik, Form, ErrorMessage, Field } from 'formik';
 import LoadingForm from '../forms/LoadingForm';
 import CustomButton from '../forms/CustomButton';
+import { findEmptyFieldsInUpdatingUser } from '../../Services';
 
 const UpdateUser = props => {
     const [loading, setLoading] = useState(true);
@@ -76,9 +77,7 @@ const UpdateUser = props => {
                                 }}
                                 validate={values => {
                                     let errors = {};
-                                    if (!values.phone) {
-                                        errors.phone = "Field Phone is required!";
-                                    }
+                                    errors = findEmptyFieldsInUpdatingUser(values, errors);
                                     return errors;
                                 }}>
                                 {({ errors, setFieldError, touched, values, handleChange }) => {
@@ -90,8 +89,14 @@ const UpdateUser = props => {
                                                 if (response.status === 200) {
                                                     history.push('/users');
                                                 } else {
-                                                    if (response.phone) {
-                                                        setFieldError('phone', response.phone.message);
+                                                    if (response) {
+                                                        Object.keys(response).map(key => {
+                                                            if (response[key]) {
+                                                                setFieldError(`${key}`, response[key].message);
+                                                            }
+
+                                                            return key;
+                                                        });
                                                     }
                                                 }
                                             }}
