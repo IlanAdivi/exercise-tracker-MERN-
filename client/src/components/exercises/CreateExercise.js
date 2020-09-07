@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { createExercise, fetchUsers } from '../../actions/index';
-import { isEmpty } from '../../Services';
+import { isAllFilled } from '../../Services';
 import CustomButton from '../forms/CustomButton';
 import LoadingForm from '../forms/LoadingForm';
 
@@ -196,7 +196,7 @@ const CreateExercise = () => {
                                     </div>
                                     <CustomButton
                                         className="ui submit black button"
-                                        disabled={isEmpty(values) ? true : false}
+                                        disabled={isAllFilled(values) ? true : false}
                                         value="Create" />
                                 </div>
                             </div>

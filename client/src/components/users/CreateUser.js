@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createUser } from '../../actions/index';
-import { isEmpty, findEmptyFieldsInCreatingUser } from '../../Services';
+import { isAllFilled, findEmptyFieldsInCreatingUser } from '../../Services';
 import CustomButton from '../forms/CustomButton';
 
 const CreateUser = () => {
@@ -54,7 +54,7 @@ const CreateUser = () => {
                         return errors;
                     }}
                 >
-                    {({ errors, setFieldError, touched, values, handleChange }) => {
+                    {({ errors, setFieldError, setFieldValue, touched, values, handleChange }) => {
                         return (
                             <Form
                                 onSubmit={async e => {
@@ -150,10 +150,8 @@ const CreateUser = () => {
                                         </div>
                                         <br />
                                         <div className="inline field">
-                                            <label>Image</label>
                                             <a
                                                 href="!#"
-                                                style={{ margin: '250px' }}
                                                 onClick={handleClick}
                                             >
                                                 Attach Image
@@ -168,7 +166,21 @@ const CreateUser = () => {
                                                 value={values.image || ''}
                                             />
                                             <div>
-                                                {values.image ? values.image.slice(12, values.image.length) : ''}
+                                                {
+                                                    values.image ?
+                                                        values.image.slice(12, values.image.length) : ''}
+                                                {values.image ?
+                                                    <i
+                                                        className="close icon"
+                                                        onClick={e => {
+                                                            e.preventDefault();
+                                                            setFieldValue('image', '');
+                                                        }}>
+                                                    </i>
+                                                    : ''
+                                                }
+                                            </div>
+                                            <div>
                                             </div>
                                         </div>
                                     </ div>
@@ -181,8 +193,25 @@ const CreateUser = () => {
                                 <CustomButton
                                     type="submit"
                                     className="ui submit black button"
-                                    disabled={isEmpty(values) ? true : false}
+                                    disabled={isAllFilled(values) ? true : false}
                                     value="Create"
+                                />
+                                <CustomButton
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setFieldValue('firstname', '');
+                                        setFieldValue('lastname', '');
+                                        setFieldValue('kind', '');
+                                        setFieldValue('phone', '');
+                                        setFieldValue('phone', '');
+                                        setFieldValue('image', '');
+                                    }}
+                                    style={{ margin: '25px' }}
+                                    className="ui submit red button"
+                                    ////Todo
+                                    ////isExist At least one field that filled
+                                    // disabled={isAllFilled(values) ? true : false}
+                                    value="Clear"
                                 />
                             </Form>
                         )

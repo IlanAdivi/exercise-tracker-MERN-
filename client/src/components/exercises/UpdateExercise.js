@@ -15,7 +15,7 @@ import {
 }
     from '../../actions';
 
-import { isEmpty } from '../../Services';
+import { isAllFilled } from '../../Services';
 import { useHistory } from 'react-router-dom';
 import LoadingForm from '../forms/LoadingForm';
 import CustomButton from '../forms/CustomButton';
@@ -198,7 +198,7 @@ const UpdateExercise = props => {
                                 <CustomButton
                                     type="submit"
                                     className="ui black submit button"
-                                    disabled={isEmpty(values) ? true : false}
+                                    disabled={isAllFilled(values) ? true : false}
                                     value="Update" />
                             </Form>
                         )

@@ -1,5 +1,5 @@
 ////Reuseable functions 
-export const isEmpty = item => {
+export const isAllFilled = item => {
     let countOfEmptyItemProperties = 0;
 
     Object.keys(item).map(itemPropeties => {

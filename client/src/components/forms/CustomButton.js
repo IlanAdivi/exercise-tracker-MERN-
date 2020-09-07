@@ -2,14 +2,15 @@ import React from 'react';
 
 const CustomButton = props => {
     return (
-        <div>
+        <span>
             <button
-            type={props.type}
+                type={props.type}
+                style={props.style}
                 className={props.className}
                 disabled={props.disabled}
                 onClick={props.onClick}
             >{props.value}</button>
-        </div>
+        </span>
     );
 };
 
