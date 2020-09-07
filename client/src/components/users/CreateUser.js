@@ -14,6 +14,7 @@ const CreateUser = () => {
     const history = useHistory();
 
     const handleClick = e => {
+        e.preventDefault();
         hiddenFileInput.current.click();
     };
 
@@ -120,26 +121,6 @@ const CreateUser = () => {
                                                 style={{ color: errors.lastname ? 'red' : '' }} />
                                         </div>
                                         <div className="field">
-                                            <label>Image</label>
-                                            <div
-                                                className="ui button"
-                                                onClick={handleClick}>
-                                                Attach Image
-                                            </div>
-                                            <Field
-                                                type="file"
-                                                name="image"
-                                                innerRef={hiddenFileInput}
-                                                encType="multipart/form-data"
-                                                onKeyUp={handleChange}
-                                                style={{ display: 'none' }}
-                                                value={values.image || ''}
-                                            />
-                                            <div>
-                                                {values.image ? values.image.slice(12, values.image.length) : ''}
-                                            </div>
-                                        </div>
-                                        <div className="field">
                                             <label>Kind</label>
                                             <Field
                                                 name="kind"
@@ -166,6 +147,29 @@ const CreateUser = () => {
                                                 name="phone"
                                                 component="div"
                                                 style={{ color: errors.phone ? 'red' : '' }} />
+                                        </div>
+                                        <br />
+                                        <div className="inline field">
+                                            <label>Image</label>
+                                            <a
+                                                href="!#"
+                                                style={{ margin: '250px' }}
+                                                onClick={handleClick}
+                                            >
+                                                Attach Image
+                                                </a>
+                                            <Field
+                                                type="file"
+                                                name="image"
+                                                innerRef={hiddenFileInput}
+                                                encType="multipart/form-data"
+                                                onKeyUp={handleChange}
+                                                style={{ display: 'none' }}
+                                                value={values.image || ''}
+                                            />
+                                            <div>
+                                                {values.image ? values.image.slice(12, values.image.length) : ''}
+                                            </div>
                                         </div>
                                     </ div>
                                 </ div>
