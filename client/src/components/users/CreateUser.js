@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { createUser } from '../../actions/index';
-import { isAllFilled, findEmptyFieldsInCreatingUser } from '../../Services';
+import { isAllFilled, findEmptyFieldsInCreatingUser, isBlankForm } from '../../Services';
 import CustomButton from '../forms/CustomButton';
 
 const CreateUser = () => {
@@ -171,7 +171,7 @@ const CreateUser = () => {
                                                         values.image.slice(12, values.image.length) : ''}
                                                 {values.image ?
                                                     <i
-                                                        className="close icon"
+                                                        className="close link icon"
                                                         onClick={e => {
                                                             e.preventDefault();
                                                             setFieldValue('image', '');
@@ -203,14 +203,11 @@ const CreateUser = () => {
                                         setFieldValue('lastname', '');
                                         setFieldValue('kind', '');
                                         setFieldValue('phone', '');
-                                        setFieldValue('phone', '');
                                         setFieldValue('image', '');
                                     }}
                                     style={{ margin: '25px' }}
                                     className="ui submit red button"
-                                    ////Todo
-                                    ////isExist At least one field that filled
-                                    // disabled={isAllFilled(values) ? true : false}
+                                    disabled={isBlankForm(values) ? true : false}
                                     value="Clear"
                                 />
                             </Form>

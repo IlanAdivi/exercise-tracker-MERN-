@@ -7,7 +7,7 @@ import { updateUser, fetchUserById } from '../../actions/index';
 import { Formik, Form, ErrorMessage, Field } from 'formik';
 import LoadingForm from '../forms/LoadingForm';
 import CustomButton from '../forms/CustomButton';
-import { findEmptyFieldsInUpdatingUser } from '../../Services';
+import { findEmptyFieldsInUpdatingUser, isBlankForm } from '../../Services';
 
 const UpdateUser = props => {
     const [loading, setLoading] = useState(true);
@@ -80,7 +80,7 @@ const UpdateUser = props => {
                                     errors = findEmptyFieldsInUpdatingUser(values, errors);
                                     return errors;
                                 }}>
-                                {({ errors, setFieldError, touched, values, handleChange }) => {
+                                {({ errors, setFieldError, setFieldValue, touched, values, handleChange }) => {
                                     return (
                                         <Form
                                             onSubmit={async e => {
@@ -107,7 +107,7 @@ const UpdateUser = props => {
                                                         <label>Phone</label>
                                                         <Field
                                                             name="phone"
-                                                            placeholder="Enter Your Phone"
+                                                            placeholder="Enter Your Phone Number"
                                                             type="text"
                                                             onKeyUp={handleChange}
                                                             style={{ borderColor: errors.phone && touched.phone ? 'red' : '' }}
@@ -124,7 +124,18 @@ const UpdateUser = props => {
                                                 type="submit"
                                                 className="ui black submit button"
                                                 disabled={!values.phone ? true : false}
-                                                value="Update" />
+                                                value="Update"
+                                            />
+                                            <CustomButton
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setFieldValue('phone', '');
+                                    }}
+                                    style={{ margin: '25px' }}
+                                    className="ui submit red button"
+                                    disabled={isBlankForm(values) ? true : false}
+                                    value="Clear"
+                                />
                                         </Form>
                                     )
                                 }}

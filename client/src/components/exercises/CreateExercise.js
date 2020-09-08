@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { createExercise, fetchUsers } from '../../actions/index';
-import { isAllFilled } from '../../Services';
+import { isAllFilled, isBlankForm } from '../../Services';
 import CustomButton from '../forms/CustomButton';
 import LoadingForm from '../forms/LoadingForm';
 
@@ -197,7 +197,21 @@ const CreateExercise = () => {
                                     <CustomButton
                                         className="ui submit black button"
                                         disabled={isAllFilled(values) ? true : false}
-                                        value="Create" />
+                                        value="Create"
+                                    />
+                                    <CustomButton
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        setFieldValue('course', '');
+                                        setFieldValue('startTime', '');
+                                        setFieldValue('endTime', '');
+                                        setFieldValue('date', '');
+                                    }}
+                                    style={{ margin: '25px' }}
+                                    className="ui submit red button"
+                                    disabled={isBlankForm(values) ? true : false}
+                                    value="Clear"
+                                />
                                 </div>
                             </div>
                         </Form>
