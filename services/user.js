@@ -47,26 +47,30 @@ module.exports = {
         const image = userImage;
         const params = s3.uploadParams;
         const s3ImageUrl = process.env.AWS_Uploaded_File_URL_LINK;
+        try {
 
-        initParams(params, image);
-        await uploadImageFromAmazon(params);
+            initParams(params, image);
+            await uploadImageFromAmazon(params);
 
-        const newUserImage = {
-            imageUrl: `${s3ImageUrl}${image.originalname}`,
-            s3_key: params.Key
-        };
-        const { imageUrl, s3_key } = newUserImage;
-        const newUser = new User({
-            firstname,
-            lastname,
-            kind,
-            phone,
-            imageUrl,
-            s3_key
-        });
+            const newUserImage = {
+                imageUrl: `${s3ImageUrl}${image.originalname}`,
+                s3_key: params.Key
+            };
+            const { imageUrl, s3_key } = newUserImage;
+            const newUser = new User({
+                firstname,
+                lastname,
+                kind,
+                phone,
+                imageUrl,
+                s3_key
+            });
 
-        await newUser.save();
-        return newUser;
+            await newUser.save();
+            return newUser;
+        } catch (err) {
+            throw err;
+        }
     },
     checkIfUserAlreadyExist: async user => {
         const { phone } = user;

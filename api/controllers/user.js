@@ -22,7 +22,9 @@ module.exports = {
                 success: "New user added"
             });
         } catch (error) {
-            res.status(400).send({ error: error });
+            res.status(400).send({
+                error: error
+            });
         }
     },
     getAllUsers: async (req, res) => {

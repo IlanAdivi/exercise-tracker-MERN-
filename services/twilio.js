@@ -32,7 +32,7 @@ module.exports = {
         // client.calls
         // .create({
         //    url: 'http://demo.twilio.com/docs/voice.xml',
-        //    to: '+9720502245478',
+        //    to: '+972...',
         //    from: TWILIO_PHONE_NUMBER
         //  })
         // .then(call => console.log(call.sid));
