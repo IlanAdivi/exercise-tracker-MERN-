@@ -3,7 +3,7 @@
 https://ilan-adivi-exercise-tracker.herokuapp.com/
 
 ## Introduction
-I developed a dog barbershop management that allows the customer to manage his orders.
+On this project, I developed a dog barbershop management that allows the customer to manage his orders.
 The system includes authentication - Register, Login, Logout etc.
 
 When the customer is logged in ,he will see his all orders.
