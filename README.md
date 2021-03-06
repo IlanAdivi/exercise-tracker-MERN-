@@ -3,13 +3,11 @@
 https://ilan-adivi-exercise-tracker.herokuapp.com/
 
 ## Introduction
-On this project, I developed a dog barbershop management that allows the customer to manage his orders.
-The system includes authentication - Register, Login, Logout etc.
+On this project, I developed an exercise-tracker app that allows the user to register for the exercise, and then he will receive an SMS that he has registered.
 
-When the customer is logged in ,he will see his all orders.
-The customer can also add new orders, delete order, and update existing order.
+As part of the project, I used in Amazon AWS-S3 for store the photos of the users, and also in Twilio to send an SMS from the server to the client.
 
-Technologies: React.js, Redux , Asp.net Core, SQL Server.
+Technologies: MongoDB, Express, React(&Redux), Node.js.
 
 
 ### Installation
